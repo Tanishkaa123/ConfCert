@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConfCert | Blockchain Certification</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Ethers.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+    <!-- Axios for HTTP Requests -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div class="background-globes">
+        <div class="globe globe-1"></div>
+        <div class="globe globe-2"></div>
+    </div>
+
+    <nav class="navbar">
+        <div class="logo">ConfCert<span class="dot">.</span></div>
+        <div class="nav-links">
+            <button id="connectWalletBtn" class="btn btn-primary">Connect Wallet</button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('issue')">Issue Certificate</button>
+            <button class="tab-btn" onclick="switchTab('bulk')">Bulk Issue</button>
+            <button class="tab-btn" onclick="switchTab('verify')">Verify Certificate</button>
+        </div>
+
+        <!-- Single Issue Section -->
+        <section id="issue-section" class="tab-content active">
+            <div class="card glass-card">
+                <h2>Issue New Certificate</h2>
+                <div class="form-group">
+                    <label>Student Name</label>
+                    <input type="text" id="studentName" placeholder="e.g. John Doe">
+                </div>
+                <div class="form-group">
+                    <label>Certificate File</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="certImage">
+                        <div class="file-custom-btn">Choose File</div>
+                        <span id="fileName">No file chosen</span>
+                    </div>
+                </div>
+                <button onclick="issueCertificate()" class="btn btn-action">Issue Certificate</button>
+                <div id="issueStatus" class="status-msg"></div>
+            </div>
+        </section>
+
+        <!-- Bulk Issue Section -->
+        <section id="bulk-section" class="tab-content">
+            <div class="card glass-card">
+                <h2>Bulk Issue Certificates</h2>
+                <p class="helper-text">Add multiple students. Upload one file per student.</p>
+
+                <div id="bulk-list">
+                    <!-- Dynamic List Items -->
+                </div>
+
+                <button onclick="addBulkItem()" class="btn btn-secondary">+ Add Student</button>
+                <div class="divider"></div>
+                <button onclick="issueBulkCertificates()" class="btn btn-action">Issue All Certificates</button>
+                <div id="bulkStatus" class="status-msg"></div>
+            </div>
+        </section>
+
+        <!-- Verify Section -->
+        <section id="verify-section" class="tab-content">
+            <div class="card glass-card">
+                <h2>Verify Certificate</h2>
+                <div class="search-box">
+                    <input type="number" id="searchId" placeholder="Enter Certificate ID (e.g. 1001)">
+                    <button type="button" onclick="verifyCertificate()" class="btn btn-icon">🔍</button>
+                </div>
+
+                <div id="verificationResult" class="result-card hidden">
+                    <div class="loading-spinner hidden" id="verifyLoader"></div>
+                    <div id="certDetails" class="hidden">
+                        <div class="cert-header">
+                            <span class="badge verified">Verified</span>
+                            <span class="cert-id" id="displayId">#1001</span>
+                        </div>
+                        <h3>Student: <span id="displayName"></span></h3>
+                        <p class="issuer">Issued by: <span id="displayIssuer"></span></p>
+                        <div class="image-container">
+                            <!-- Object tag allows rendering PDFs or Images, fallback to link -->
+                            <object id="displayFile" data="" type="application/pdf" width="100%" height="400px"
+                                style="border-radius:10px; display:none;">
+                                <img id="displayImage" src="" alt="Certificate Preview"
+                                    style="max-width:100%; display:none;">
+                            </object>
+                            <div id="filePlaceholder"
+                                style="display:none; padding:2rem; background:rgba(255,255,255,0.05); border-radius:10px; margin:1rem 0;">
+                                📄 Document Available
+                            </div>
+                        </div>
+                        <a id="ipfsLink" href="#" target="_blank" class="ipfs-link btn btn-secondary"
+                            style="display:inline-block; margin-top:1rem;">View / Download File</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+    </main>
+
+    <script src="abi.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
